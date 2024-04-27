@@ -2,6 +2,9 @@ package net.murwan.securityjwt.auth;
 
 import lombok.RequiredArgsConstructor;
 import net.murwan.securityjwt.config.JwtService;
+import net.murwan.securityjwt.dto.LoginRequestDTO;
+import net.murwan.securityjwt.dto.AuthenticationResponseDTO;
+import net.murwan.securityjwt.dto.RegisterRequestDTO;
 import net.murwan.securityjwt.user.Role;
 import net.murwan.securityjwt.user.User;
 import net.murwan.securityjwt.user.UserRepository;
@@ -18,7 +21,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponseDTO register(RegisterRequestDTO request) {
         var user = User.builder()
                 .firstname(request.getFirstName())
                 .lastname(request.getLastName())
@@ -28,16 +31,16 @@ public class AuthenticationService {
                 .build();
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponseDTO.builder().token(jwtToken).build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponseDTO authenticate(LoginRequestDTO request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()
                 )
         );
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponseDTO.builder().token(jwtToken).build();
     }
 }

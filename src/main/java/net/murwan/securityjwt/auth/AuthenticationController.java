@@ -1,6 +1,9 @@
 package net.murwan.securityjwt.auth;
 
 import lombok.RequiredArgsConstructor;
+import net.murwan.securityjwt.dto.LoginRequestDTO;
+import net.murwan.securityjwt.dto.AuthenticationResponseDTO;
+import net.murwan.securityjwt.dto.RegisterRequestDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,12 +19,12 @@ public class AuthenticationController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthenticationResponseDTO> register(@RequestBody RegisterRequestDTO request) {
         return ResponseEntity.ok(service.register(request));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponseDTO> authenticate(@RequestBody LoginRequestDTO request) {
         return ResponseEntity.ok(service.authenticate(request));
     }
 }
